@@ -58,7 +58,7 @@ class Sample(MSection):
 
 ###############################################################################
 ###############################################################################
-class Entry(Schema):
+class SXDMData(Schema):
     definition = Quantity(
         type=str,
         description="Name of the potential NeXus application definition."

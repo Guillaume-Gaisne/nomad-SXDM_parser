@@ -31,7 +31,7 @@ class MyParser(MatchingParser):
         return dataset[()].decode('UTF-8')
 
     def parse_instrument(self):
-        instrument = self.entry.m_create(sxdm.Instrument)
+        instrument = self.sxdm.m_create(sxdm.Instrument)
         monochromator = instrument.m_create(sxdm.Monochromator)
         monochromator.energy = self.extract_string(
             self.instrument['monochromator/energy']
@@ -45,7 +45,7 @@ class MyParser(MatchingParser):
 
 ###############################################################################
     def parse_data(self):
-        data = self.entry.m_create(sxdm.Data)
+        data = self.sxdm.m_create(sxdm.Data)
 
         data.energy = self.extract_string(self.data_section['energy'])
         data.sxdm_scan_type = self.extract_string(self.data_section['sdxm_scan_type'])
@@ -63,7 +63,7 @@ class MyParser(MatchingParser):
 
 ###############################################################################
     def parse_sample(self):
-        sample = self.entry.m_create(sxdm.Sample)
+        sample = self.sxdm.m_create(sxdm.Sample)
         sample.rotation_angle = self.sample['rotation_angle'][()]
 
 
@@ -88,16 +88,16 @@ class MyParser(MatchingParser):
             self.data = None
             return
 
-        self.entry = sxdm.Entry()
+        self.sxdm = sxdm.SXDMData()
 
         sec_entry = self.data['ENTRY']
 
-        archive.data = self.entry
+        archive.data = self.sxdm
 
-        self.entry.definition = self.extract_string(sec_entry['definition'])
-        self.entry.start_time = self.extract_string(sec_entry['start_time'])
-        self.entry.end_time = self.extract_string(sec_entry['end_time'])
-        self.entry.title = self.extract_string(sec_entry['title'])
+        self.sxdm.definition = self.extract_string(sec_entry['definition'])
+        self.sxdm.start_time = self.extract_string(sec_entry['start_time'])
+        self.sxdm.end_time = self.extract_string(sec_entry['end_time'])
+        self.sxdm.title = self.extract_string(sec_entry['title'])
 
         self.data_section = sec_entry.get('DATA')
         self.instrument = sec_entry.get('INSTRUMENT')
@@ -106,5 +106,3 @@ class MyParser(MatchingParser):
         self.parse_data()
         self.parse_instrument()
         self.parse_sample()
-
-        archive.results = Results(material=Material(elements=['Ga', 'N']))
