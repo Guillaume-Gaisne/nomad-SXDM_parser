@@ -1,4 +1,4 @@
-# Welcome to the `nomad-SXDM_parser` documentation
+# Welcome to the `SXDM_parser` documentation
 
 Parser for experimental data coming from SXDM at ESRF
 
